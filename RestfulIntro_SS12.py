@@ -1,4 +1,5 @@
 from flask import Flask,render_template
+import mongoengine
 from mongoengine import *
 from flask_restful import Resource,Api,reqparse
 import json
@@ -29,15 +30,13 @@ hrc_list =[
     "Nhân mã","Yêu đời, phởn","https://slack-redir.net/link?url=http%3A%2F%2Fimg.v3.news.zdn.vn%2Fw660%2FUploaded%2Fjaroin%2F2015_12_30%2F2_1.jpg"
 ]
 
-connect(
-   'vuhoang98',
-   username = 'vuhoang1998',
-   password = 'vh141298',
-   host = 'ds133328.mlab.com',
-   port = 33328
+mongoengine.connect(
+    "vuhoang98",
+    host ="ds133328.mlab.com",
+    port= 33328,
+    username = "admin",
+    password = "141298"
 )
-
-
 class Music(Document): #Music
     yourname = StringField()
     songname = StringField()
@@ -45,6 +44,7 @@ class Music(Document): #Music
     image = StringField()
     link = StringField()
 
+print(Music.objects)
 
 class MusicListRes(Resource):
     def get(self): #read
@@ -89,6 +89,7 @@ def me2json(item):
     return json.loads(item.to_json())
 def meList2json(list):
     return[me2json(item) for item in list]
+print(meList2json(Music.objects))
 
 
 if __name__ == '__main__':
